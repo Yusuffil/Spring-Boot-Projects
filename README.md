@@ -1,1 +1,1 @@
-Farklı senaryolarla yazılmış API projeleri mevcuttur. OneToMany ve ManyToOne ilişkileri kullanılarak Spring Boot ile CRUD işlemleri yapılmıştır.
+It contents API projects that developed with different scenario. CRUD operations are executed with Spring Boot via OneToMany and ManyToOne relations.
