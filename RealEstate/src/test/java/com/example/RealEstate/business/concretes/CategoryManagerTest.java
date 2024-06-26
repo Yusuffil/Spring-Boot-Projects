@@ -2,7 +2,7 @@ package com.example.RealEstate.business.concretes;
 
 import com.example.RealEstate.business.requests.CreateCategoryRequest;
 import com.example.RealEstate.business.requests.UpdateCategoryRequest;
-import com.example.RealEstate.business.responses.CreateCategoryResponse;
+import com.example.RealEstate.business.responses.GetAllCategoryResponses;
 import com.example.RealEstate.business.responses.GetByCategoryIdResponse;
 import com.example.RealEstate.business.rules.CategoryBusinessRules;
 import com.example.RealEstate.core.utilities.exceptions.BusinessException;
@@ -16,10 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,6 +39,25 @@ class CategoryManagerTest {
     @Test
     @Disabled
     void getAll() {
+        var category1 = new Category();
+        category1.setName("Tarla");
+        category1.setId(1);
+
+        List<Category> categories = new ArrayList<>();
+        categories.add(category1);
+
+        GetAllCategoryResponses categoryResponses = new GetAllCategoryResponses();
+        categoryResponses.setName("Tarla");
+        categoryResponses.setId(1);
+
+
+        var modelMapper = new ModelMapper();
+        Mockito.when(categoryRepository.findAll()).thenReturn(categories);
+        Mockito.when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        // Stream map yapamadım
+        List<GetAllCategoryResponses> categoryResponsesList =new ArrayList<>();
+        Mockito.when(categoryManager.getAll()).thenReturn(categoryResponsesList);
+
     }
 
     @Test
@@ -53,7 +73,6 @@ class CategoryManagerTest {
 
         var response = categoryManager.add(createCategoryRequest);
         assertEquals(createCategoryRequest.getName(), response.getName());
-
 
 
     }
@@ -82,8 +101,8 @@ class CategoryManagerTest {
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getName()).isEqualTo(category.getName());
 
-        Mockito.verify(categoryRepository,Mockito.times(1)).findById(id);
-        Mockito.verify(modelMapperService,Mockito.times(1)).forResponse();
+        Mockito.verify(categoryRepository, Mockito.times(1)).findById(id);
+        Mockito.verify(modelMapperService, Mockito.times(1)).forResponse();
     }
 
     @Test
@@ -96,9 +115,6 @@ class CategoryManagerTest {
 
         Mockito.when(modelMapperService.forRequest()).thenReturn(modelMapper);
         Mockito.when(categoryRepository.save(category)).thenReturn(category);
-
-
-
 
 
     }
